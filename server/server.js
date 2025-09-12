@@ -1,6 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = 5050;
+
+app.use(cors()); 
 
 // ✅ Confirm this file is running
 console.log('🧨 Confirmed: THIS server.js is running');
