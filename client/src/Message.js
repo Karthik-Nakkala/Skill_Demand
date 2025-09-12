@@ -4,13 +4,23 @@ const Message = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/message')
-      .then(res => res.json())
-      .then(data => setMessage(data.message))
-      .catch(err => console.error('Error fetching message:', err));
+    fetch('http://localhost:5050/api/users')
+      .then(res => res.text())
+      .then(data => {
+        console.log('✅ Fetched from backend:', data);
+        setMessage(data);
+      })
+      .catch(err => {
+        console.error('❌ Error fetching:', err);
+      });
   }, []);
 
-  return <h2>{message}</h2>;
+  return (
+    <div>
+      <h2>Backend Response:</h2>
+      <p>{message}</p>
+    </div>
+  );
 };
 
 export default Message;

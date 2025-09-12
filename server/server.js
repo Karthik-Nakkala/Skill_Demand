@@ -1,37 +1,24 @@
-// 🧠 SkillDemand backend starting from THIS server.js
 const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const fs = require('fs');
-const path = require('path');
-
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5050;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// ✅ Confirm this file is running
+console.log('🧨 Confirmed: THIS server.js is running');
 
-// ✅ Confirm route file exists using absolute path
-const messagePath = path.join(__dirname, 'routes', 'message.js');
-console.log('📁 Checking if message.js exists:', fs.existsSync(messagePath));
+// ✅ Import and use the message router
+const usersRouter = require('./routes/users');
+app.use('/api/users', usersRouter);
 
-// ✅ Load and register routes
-const messageRoutes = require(messagePath);
-console.log('✅ message.js routes loaded');
-app.use('/api', messageRoutes);
-
-// Root route
-app.get('/', (req, res) => {
-  res.send('SkillDemand backend is running');
+// ✅ Minimal route
+app.get('/api/status', (req, res) => {
+  console.log('🧪 /api/status route hit');
+  res.json({
+    service: 'SkillDemand',
+    status: 'online',
+    timestamp: new Date().toISOString()
+  });
 });
-app.get('/api/users', (req, res) => {
-  console.log('🧪 Direct /api/users route hit');
-  res.send('Direct route working');
-});
-// Start server
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🧪 Minimal server running on port ${PORT}`);
 });
