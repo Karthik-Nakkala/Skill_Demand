@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from 'react';
 
-const Message = () => {
-  const [message, setMessage] = useState('');
+const Messages = () => {
+  const [messages, setMessages] = useState([]);
+  const userId = 1; // You can make this dynamic later
 
   useEffect(() => {
-    fetch('http://localhost:5050/api/users')
-      .then(res => res.text())
+    fetch(`http://localhost:5050/api/users/messages/${userId}`)
+      .then(res => res.json())
       .then(data => {
-        console.log('✅ Fetched from backend:', data);
-        setMessage(data);
+        console.log('✅ Messages fetched for user:', data);
+        setMessages(data);
       })
       .catch(err => {
-        console.error('❌ Error fetching:', err);
+        console.error('❌ Error fetching messages:', err);
       });
   }, []);
 
   return (
     <div>
-      <h2>Backend Response:</h2>
-      <p>{message}</p>
+      <h2>Messages for User {userId}:</h2>
+      <ul>
+        {messages.map(msg => (
+          <li key={msg.id}>{msg.text}</li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default Message;
+export default Messages;
