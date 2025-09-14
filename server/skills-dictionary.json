@@ -1,0 +1,12 @@
+[
+  "JavaScript", "TypeScript", "React", "Next.js", "Node.js", "Express", "HTML", "CSS",
+  "Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "TensorFlow",
+  "SQL", "PostgreSQL", "MySQL", "MongoDB", "SQLite",
+  "Docker", "Kubernetes", "AWS", "Azure", "GCP", "CI/CD", "Jenkins", "Git", "GitHub",
+  "Figma", "Sketch", "Adobe XD", "Photoshop", "Illustrator",
+  "Power BI", "Tableau", "Excel", "Agile", "Scrum", "JIRA", "Confluence",
+  "Java", "C++", "C#", "Go", "Rust", "PHP", "Ruby", "Swift", "Kotlin",
+  "GraphQL", "REST API", "WebSockets", "OAuth", "JWT",
+  "Linux", "Shell Scripting", "Bash", "Zsh",
+  "Salesforce", "SAP", "ServiceNow", "Snowflake", "BigQuery", "Hadoop", "Spark"
+]

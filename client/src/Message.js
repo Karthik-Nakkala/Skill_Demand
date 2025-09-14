@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
-  const userId = 1; // You can make this dynamic later
+  const userId = localStorage.getItem('userId') || 1;
 
   useEffect(() => {
     fetch(`http://localhost:5050/api/users/messages/${userId}`)

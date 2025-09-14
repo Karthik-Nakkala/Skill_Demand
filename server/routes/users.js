@@ -1,8 +1,45 @@
-// server/routes/users.js
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const fs = require('fs');
+const pdfParse = require('pdf-parse');
+const stopwords = require('stopwords').english;
 
 console.log('📦 users.js file is being executed');
+
+// In-memory store for uploaded resume analysis
+const userResumes = {};
+
+// Domain classification dictionary
+const skillDomains = {
+  WebDev: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js', 'Express', 'HTML', 'CSS'],
+  DataScience: ['Python', 'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Scikit-learn', 'TensorFlow', 'SQL'],
+  Cloud: ['AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes'],
+  Design: ['Figma', 'Sketch', 'Adobe XD', 'Photoshop', 'Illustrator'],
+  Business: ['Excel', 'Power BI', 'Agile', 'Scrum', 'JIRA', 'Confluence'],
+  Backend: ['Java', 'C++', 'C#', 'Go', 'Rust', 'PHP', 'Ruby', 'GraphQL', 'MongoDB', 'MySQL', 'PostgreSQL']
+};
+
+// Keyword density function
+function getKeywordDensity(text) {
+  const words = text
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, '')
+    .split(/\s+/)
+    .filter(word => word && !stopwords.includes(word));
+
+  const frequency = {};
+  words.forEach(word => {
+    frequency[word] = (frequency[word] || 0) + 1;
+  });
+
+  const sorted = Object.entries(frequency)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 20);
+
+  return sorted.map(([word, count]) => ({ word, count }));
+}
 
 router.get('/', (req, res) => {
   console.log('🧪 Inside /api/users route');
@@ -17,6 +54,7 @@ router.get('/messages', (req, res) => {
     { id: 3, text: 'Skill gap detected: React Hooks' }
   ]);
 });
+
 router.get('/messages/:userId', (req, res) => {
   const { userId } = req.params;
   console.log(`🧪 Fetching messages for user ${userId}`);
@@ -35,19 +73,89 @@ router.get('/messages/:userId', (req, res) => {
   res.json(messages[userId] || []);
 });
 
-module.exports = router;
+router.post('/upload', upload.single('resume'), async (req, res) => {
+  console.log('🧾 req.body:', req.body);
+  const userId = req.body.userId || 'unknown';
+  const filename = req.file.originalname;
+  const filePath = req.file.path;
 
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+  console.log(`📄 Resume uploaded by user ${userId}: ${filename}`);
 
-router.post('/upload', upload.single('resume'), (req, res) => {
-  console.log('📄 Resume uploaded:', req.file.originalname);
+  try {
+    const fileBuffer = fs.readFileSync(filePath);
+    const pdfData = await pdfParse(fileBuffer);
+    const text = pdfData.text;
 
-  const analysis = {
-    summary: 'Resume received and parsed.',
-    skillsDetected: ['JavaScript', 'React', 'Node.js'],
-    missingSkills: ['Docker', 'GraphQL'],
-  };
+    if (!text || text.trim().length === 0) {
+      console.error('❌ Resume text is empty or unreadable.');
+      return res.status(500).json({ error: 'Failed to parse resume.' });
+    }
 
-  res.json(analysis);
+    console.log('📄 Parsed resume preview:', text.slice(0, 500));
+
+    // Dynamic skill detection
+    const allSkills = require('../skills-dictionary.json');
+    const skillsDetected = allSkills.filter(skill =>
+      text.toLowerCase().includes(skill.toLowerCase())
+    );
+
+    // Domain classification
+    const domainScores = {};
+    for (const domain in skillDomains) {
+      const domainSkills = skillDomains[domain];
+      const matched = domainSkills.filter(skill =>
+        skillsDetected.includes(skill)
+      );
+      domainScores[domain] = matched.length;
+    }
+
+    // Top skills for display
+    const topSkills = skillsDetected.slice(0, 20);
+
+    // Keyword density
+    const keywordDensity = getKeywordDensity(text);
+
+    // Missing skills
+    const missingSkills = allSkills.filter(skill =>
+      !skillsDetected.includes(skill)
+    );
+
+    // Scope suggestions by domain
+    const scopeSuggestions = {};
+    for (const domain in skillDomains) {
+      const domainSkills = skillDomains[domain];
+      const missingInDomain = domainSkills.filter(skill =>
+        !skillsDetected.includes(skill)
+      );
+      if (missingInDomain.length > 0) {
+        scopeSuggestions[domain] = missingInDomain;
+      }
+    }
+
+    const analysis = {
+      summary: `Resume parsed successfully. Found ${skillsDetected.length} known skills.`,
+      skillsDetected: topSkills,
+      keywordDensity,
+      domainScores,
+      missingSkills,
+      scopeSuggestions,
+      filename
+    };
+
+    if (!userResumes[userId]) userResumes[userId] = [];
+    userResumes[userId].push(analysis);
+    console.log('📦 Stored resumes for user', userId, ':', userResumes[userId]);
+    res.json(analysis);
+  } catch (err) {
+    console.error('❌ Error parsing PDF:', err);
+    res.status(500).json({ error: 'Failed to parse resume.' });
+  }
 });
+
+router.get('/uploads/:userId', (req, res) => {
+  const { userId } = req.params;
+  console.log(`📂 Fetching uploads for user ${userId}`);
+  res.json(userResumes[userId] || []);
+});
+
+module.exports = router;
