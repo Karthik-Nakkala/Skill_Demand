@@ -20,27 +20,19 @@ ChartJS.register(
 );
 
 const SkillRadar = ({ analysis }) => {
-  if (!analysis || !analysis.domainScores) {
-    console.log('⚠️ No domainScores found in analysis');
-    return null;
-  }
+  if (!analysis || !analysis.aspirationDomainScores) return null;
 
-  const labels = Object.keys(analysis.domainScores);
-  const values = Object.values(analysis.domainScores);
-
-  console.log('📊 domainScores:', analysis.domainScores);
+  const labels = Object.keys(analysis.aspirationDomainScores);
+  const values = Object.values(analysis.aspirationDomainScores);
 
   const allZero = values.every(val => val === 0);
-  if (allZero) {
-    console.log('⚠️ All domain scores are zero, skipping radar chart');
-    return null;
-  }
+  if (allZero) return null;
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'Domain Coverage',
+        label: 'Aspiration Domain Coverage',
         data: values,
         backgroundColor: 'rgba(33, 150, 243, 0.2)',
         borderColor: 'rgba(33, 150, 243, 1)',

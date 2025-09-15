@@ -1,16 +1,13 @@
 import React from 'react';
 
 const SkillProgress = ({ analysis }) => {
-  if (!analysis) return null;
+  if (!analysis || typeof analysis.aspirationCoverage !== 'number') return null;
 
-  const detected = Array.isArray(analysis.skillsDetected) ? analysis.skillsDetected.length : 0;
-  const missing = Array.isArray(analysis.missingSkills) ? analysis.missingSkills.length : 0;
-  const totalSkills = detected + missing;
-  const percent = totalSkills > 0 ? Math.round((detected / totalSkills) * 100) : 0;
+  const percent = analysis.aspirationCoverage;
 
   return (
     <div style={{ marginTop: '20px' }}>
-      <h3>Skill Coverage</h3>
+      <h3>Skill Coverage for {analysis.aspiration}</h3>
       <div style={{ background: '#eee', height: '20px', borderRadius: '5px', overflow: 'hidden' }}>
         <div
           style={{
@@ -21,7 +18,7 @@ const SkillProgress = ({ analysis }) => {
           }}
         />
       </div>
-      <p>{percent}% of known skills detected</p>
+      <p>{percent}% of relevant skills detected</p>
     </div>
   );
 };

@@ -1,0 +1,166 @@
+{
+  "summary": "Resume parsed successfully. Found 15 known skills.",
+  "skillsDetected": [
+    "JavaScript",
+    "React",
+    "Node.js",
+    "Express",
+    "HTML",
+    "CSS",
+    "Python",
+    "SQL",
+    "MongoDB",
+    "Git",
+    "GitHub",
+    "Java",
+    "C++",
+    "Go",
+    "JWT"
+  ],
+  "keywordDensity": [
+    {
+      "word": "data",
+      "count": 10
+    },
+    {
+      "word": "expressjs",
+      "count": 5
+    },
+    {
+      "word": "sort",
+      "count": 5
+    },
+    {
+      "word": "github",
+      "count": 4
+    },
+    {
+      "word": "javascript",
+      "count": 4
+    },
+    {
+      "word": "web",
+      "count": 4
+    },
+    {
+      "word": "sql",
+      "count": 3
+    },
+    {
+      "word": "xml",
+      "count": 3
+    },
+    {
+      "word": "developed",
+      "count": 3
+    },
+    {
+      "word": "financial",
+      "count": 3
+    },
+    {
+      "word": "ensuring",
+      "count": 3
+    },
+    {
+      "word": "manage",
+      "count": 3
+    },
+    {
+      "word": "development",
+      "count": 3
+    },
+    {
+      "word": "api",
+      "count": 3
+    },
+    {
+      "word": "mongodb",
+      "count": 3
+    },
+    {
+      "word": "jwt",
+      "count": 3
+    },
+    {
+      "word": "authentication",
+      "count": 3
+    },
+    {
+      "word": "user",
+      "count": 3
+    },
+    {
+      "word": "sorting",
+      "count": 3
+    },
+    {
+      "word": "html",
+      "count": 3
+    }
+  ],
+  "domainScores": {
+    "WebDev": 6,
+    "DataScience": 2,
+    "Cloud": 0,
+    "Design": 0,
+    "Business": 0,
+    "Backend": 4
+  },
+  "aspirationDomainScores": {
+    "WebDev": 6,
+    "Backend": 4,
+    "Cloud": 0
+  },
+  "aspirationCoverage": 42,
+  "filteredSuggestions": {
+    "WebDev": [
+      "TypeScript",
+      "Next.js"
+    ],
+    "Backend": [
+      "C#",
+      "Rust",
+      "PHP",
+      "Ruby",
+      "GraphQL",
+      "MySQL",
+      "PostgreSQL"
+    ],
+    "Cloud": [
+      "AWS",
+      "Azure",
+      "GCP",
+      "Docker",
+      "Kubernetes"
+    ]
+  },
+  "recommendations": [
+    {
+      "skill": "Rust",
+      "project": "Write a CLI tool in Rust that parses and analyzes text files."
+    },
+    {
+      "skill": "GraphQL",
+      "project": "Build a GraphQL server with Apollo and connect it to MongoDB."
+    },
+    {
+      "skill": "AWS",
+      "project": "Deploy a static site to AWS S3 and set up CloudFront for CDN."
+    },
+    {
+      "skill": "Docker",
+      "project": "Build and containerize a Node.js API using Docker Compose."
+    }
+  ],
+  "aspiration": "Fullstack Developer",
+  "filename": "resume-2.pdf",
+  "name": "Srinivasulu Chakali",
+  "email": "",
+  "education": [
+    null
+  ],
+  "experience": [
+    null
+  ]
+}
